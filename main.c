@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	find_path_and_exec(t_data *info, char **read_line, char **env_p)
+void	find_path_and_exec(t_data *info, char **read_line)
 {
 	int		i;
 	char	*tmp;
@@ -26,7 +26,7 @@ void	find_path_and_exec(t_data *info, char **read_line, char **env_p)
 		free(tmp2);
 		if (access(tmp, F_OK) != -1)
 		{
-			execve(tmp, read_line, env_p);
+			execve(tmp, read_line, info->env_p);
 			free(tmp);
 			exit(42);
 		}
@@ -34,7 +34,7 @@ void	find_path_and_exec(t_data *info, char **read_line, char **env_p)
 	}
 }
 
-int	create_fork_and_exec(t_data *info, char **read_line, char **env_p)
+int	create_fork_and_exec(t_data *info, char **read_line)
 {
 	int		i;
 	char	*tmp;
@@ -47,7 +47,7 @@ int	create_fork_and_exec(t_data *info, char **read_line, char **env_p)
 	fork_id = fork();
 	if (fork_id == 0)
 	{
-		find_path_and_exec(info, read_line, env_p);
+		find_path_and_exec(info, read_line);
 		printf("minishell: %s: command not found\n", read_line[0]);
 		exit(42);
 	}
@@ -71,8 +71,46 @@ void	set_env_p(t_data *info, char **env_p)
 		ft_lstadd_back(&result_lst, tmplst_1);
 		free(temp);
 	}
+	info->env_p = env_p;
 	info->env_lst = result_lst;
 	info->paths = ft_split(getenv("PATH"), ":");
+}
+
+void	replace_dollar(t_data *info, char *s)
+{
+	int		i;
+	t_list	*temp;
+	char	*new_s;
+
+	i = 0;
+	while (s[i] != '$')
+		i++;
+	i++;
+	temp = info->env_lst;
+	while (temp)
+	{
+		if (ft_strnstr(temp->key, (char *)(s + i), ft_strlen((char *)(s + i))) != NULL)
+		{
+			printf("KEY: %s \nGİRİLEN DEĞER: %s\n", temp->key, (char *)(s + i));
+			break ;
+		}
+		temp = temp->next;
+	}
+}
+
+void	check_dollar(t_data *info, char **s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+	{
+		if (ft_char_count(s[i], '$')) // !!
+		{
+			replace_dollar(info, s[i]);
+			// free(s);
+		}
+	}
 }
 
 int	main(int argc, char *argv[], char **env_p)
@@ -85,10 +123,15 @@ int	main(int argc, char *argv[], char **env_p)
 	set_env_p(info, env_p);
 	while (1)
 	{
-		read_line = readline("(Minishell)$> ");
+		read_line = readline("\033[0;31m(Minishell)$>\033[0m ");
 		read_line_split = lexer(read_line);
 		add_history(read_line);
-		create_fork_and_exec(info, read_line_split, env_p);
+		// split yaparken dolara görede splitleticez
+		// sebebi: $ dan sonraki 
+		// eğer dolardan sonraki değer path de yok ise hiç bir şey yazmayacak
+		// dolar burada değiştirilecek
+		check_dollar(info, read_line_split);
+		create_fork_and_exec(info, read_line_split);
 		free_lexer(read_line, read_line_split);
 	}
 	return (0);

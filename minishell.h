@@ -39,17 +39,20 @@ typedef struct s_data
 	int				number_of_avaible_arguments;
 	char			**arguments;
 	char			**paths;
+	char			**env_p;
 	t_list			*env_lst;
 }	t_data;
 
 // lexer/lexer.c
-char		**lexer(char *read_line);
-void		*add_space(char *read_line);
-void		free_lexer(char *read_line, char **read_line_split);
+int		pipe_ct(char *read_line);
+void	free_lexer(char *read_line, char **read_line_split);
+int		ft_char_count(char *read_line, int c);
+char	*ft_remove_quotes(char *read_line);
+char	**lexer(char *read_line);
 
 // main.c
-void		find_path_and_exec(t_data *info, char **read_line, char **env_p);
-int			create_fork_and_exec(t_data *info, char **read_line, char **env_p);
+void		find_path_and_exec(t_data *info, char **read_line);
+int			create_fork_and_exec(t_data *info, char **read_line);
 
 // utils/lst_all.c
 t_list		*ft_lstnew(void *key, void *value);
@@ -58,6 +61,7 @@ void		ft_lstadd_back(t_list **lst, t_list *new);
 
 // utils/ft_split.c
 char		*ft_strchr(const char *s, int c);
+char		*add_space(char *read_line);
 size_t		count_word(const char *p, const char *delim);
 char		**ft_split(const char *s, const char *delim);
 
@@ -66,7 +70,8 @@ char		**ft_split(const char *s, const char *delim);
 size_t		ft_strlen(const char *str);
 char		*ft_strdup(const char *s);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
-int			ft_strncmp(const char *s1, const char *s2);
+int			ft_strcmp(const char *s1, const char *s2);
 char		*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 #endif

@@ -68,7 +68,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (p);
 }
 
-int	ft_strncmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 
@@ -102,4 +102,33 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	str[i] = '\0';
 	return (str);
+}
+
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+{
+	size_t	i;
+	size_t	j;
+	size_t	p;
+
+	i = 0;
+	if (!(*needle))
+		return (NULL);
+	while (haystack[i] && i < len)
+	{
+		j = 0;
+		if (haystack[i] == needle[j])
+		{
+			p = i;
+			while (haystack[i] == needle[j] && haystack[i] && i < len)
+			{
+				i++;
+				j++;
+			}
+			if (!needle[j])
+				return ((char *)haystack + p);
+			i = p;
+		}
+		i++;
+	}
+	return (NULL);
 }

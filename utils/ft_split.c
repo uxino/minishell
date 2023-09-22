@@ -28,6 +28,35 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+char	*add_space(char *read_line)
+{
+	int		i;
+	int		j;
+	char	*new_line;
+
+	i = -1;
+	j = 0;
+	new_line = malloc((ft_strlen(read_line) + pipe_ct(read_line)));
+	while (read_line[++i])
+	{
+		if (read_line[i] == '|' || read_line[i] == '<' || read_line[i] == '>')
+		{
+			new_line[i + j++] = ' ';
+			new_line[i + j] = read_line[i];
+			if ((read_line[i] && read_line[i + 1]
+					&& read_line[i] == '>' && read_line[i + 1] == '>'
+					|| read_line[i] == '<' && read_line[i + 1] == '<')
+				&& read_line[++i])
+				new_line[i + j] = read_line[i];
+			new_line[i + ++j] = ' ';
+			continue ;
+		}
+		new_line[i + j] = read_line[i];
+	}
+	new_line[i + j] = 0;
+	return (new_line);
+}
+
 size_t	count_word(const char *p, const char *delim)
 {
 	size_t	i;
