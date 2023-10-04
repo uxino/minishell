@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:43 by museker           #+#    #+#             */
-/*   Updated: 2023/09/19 15:19:17 by museker          ###   ########.fr       */
+/*   Updated: 2023/09/27 17:46:26 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,80 +28,50 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*add_space(char *read_line)
+int	count_word(const char *p, char c)
 {
 	int		i;
-	int		j;
-	char	*new_line;
+	int		len;
 
-	i = -1;
-	j = 0;
-	new_line = malloc((ft_strlen(read_line) + pipe_ct(read_line)));
-	while (read_line[++i])
-	{
-		if (read_line[i] == '|' || read_line[i] == '<' || read_line[i] == '>')
-		{
-			new_line[i + j++] = ' ';
-			new_line[i + j] = read_line[i];
-			if ((read_line[i] && read_line[i + 1]
-					&& read_line[i] == '>' && read_line[i + 1] == '>'
-					|| read_line[i] == '<' && read_line[i + 1] == '<')
-				&& read_line[++i])
-				new_line[i + j] = read_line[i];
-			new_line[i + ++j] = ' ';
-			continue ;
-		}
-		new_line[i + j] = read_line[i];
-	}
-	new_line[i + j] = 0;
-	return (new_line);
-}
-
-size_t	count_word(const char *p, const char *delim)
-{
-	size_t	i;
-	size_t	len;
-
-	len = 0;
 	i = 0;
+	len = 0;
 	while (p[i])
 	{
-		while (ft_strchr(delim, p[i]) && p[i])
+		while (p[i] == c && p[i])
 			i++;
-		if (!ft_strchr(delim, p[i]) && p[i])
+		if (p[i] != c && p[i])
 		{
 			len++;
-			while (!ft_strchr(delim, p[i]) && p[i])
+			while (p[i] != c && p[i])
 				i++;
 		}
 	}
 	return (len);
 }
 
-char	**ft_split(const char *s, const char *delim)
+char	**ft_split(char const *s, char c)
 {
-	char	**list;
-	size_t	i;
-	size_t	tmp;
-	size_t	h_y;
+	int		i;
+	int		j;
+	int		temp;
+	char	**str;
 
 	i = 0;
-	h_y = 0;
-	list = (char **)malloc(sizeof(char *) * (count_word(s, delim) + 1));
-	if (!list)
+	j = 0;
+	str = (char **)malloc(sizeof(char *) * (count_word(s, c) + 1));
+	if (!str)
 		return (NULL);
 	while (s[i])
 	{
-		while (ft_strchr(delim, s[i]) && s[i])
+		while (s[i] && s[i] == c)
 			i++;
-		tmp = i;
-		while (!ft_strchr(delim, s[tmp]) && s[tmp])
-			tmp++;
-		if (count_word(s, delim) == h_y)
+		temp = i;
+		while (s[i] && s[i] != c)
+			i++;
+		if (count_word(s, c) == j)
 			break ;
-		list[h_y++] = ft_substr(s, i, tmp - i);
-		i = tmp;
+		str[j++] = ft_substr(s, temp, i - temp);
 	}
-	list[h_y] = NULL;
-	return (list);
+	str[j] = 0;
+	return (str);
 }
