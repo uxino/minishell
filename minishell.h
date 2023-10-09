@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 16:43:11 by museker           #+#    #+#             */
-/*   Updated: 2023/10/09 22:41:49 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/10 01:02:49 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int			add_export(t_data *info, char *rl);
 void		env_builtin(t_data *info);
 int			export_control_and_change(t_data *info, char *s, char *p);
 void		export_builtin(t_data *info);
+int			export_syntax(t_data *info);
+
 // exec/exec.c
 void		exec(t_data *info);
 int			exec_command(t_data *info, char **read_line, int count, int i);
@@ -145,7 +147,7 @@ char		**ft_split(char const *s, char c);
 
 // utils/ft_str_1.c
 size_t		ft_strlen(const char *str);
-int			ft_find_index(char *s, char c);
+int			find_i(char *s, char c);
 int			ft_strcmp(const char *s1, const char *s2);
 char		*ft_before_c(char *s, char c);
 char		*ft_strnstr(const char *haystack, const char *needle, size_t len);

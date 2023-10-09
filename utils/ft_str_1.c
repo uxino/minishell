@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:40 by museker           #+#    #+#             */
-/*   Updated: 2023/10/09 22:13:05 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/10 00:56:31 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-int	ft_find_index(char *s, char c)
+int	find_i(char *s, char c)
 {
 	int	i;
 
