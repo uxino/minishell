@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:43 by museker           #+#    #+#             */
-/*   Updated: 2023/09/27 17:46:26 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/09 21:16:03 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ char	*ft_strchr(const char *s, int c)
 
 int	count_word(const char *p, char c)
 {
-	int		i;
-	int		len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = 0;

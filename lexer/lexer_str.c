@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:43 by museker           #+#    #+#             */
-/*   Updated: 2023/10/04 22:36:18 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/07 20:30:45 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*check_dollar(t_data *info, char *s)
 	i = 0;
 	z = -1;
 	new = (char **)malloc(sizeof(char *) * (ft_strlen(s) + 1));
-	while (s[i])
+ 	while (s[i])
 	{
 		if (s[i] == '$')
 			temp = dollar_split(info, s, &i);
@@ -73,13 +73,11 @@ void	*no_dollar_split(char *s, int *in)
 	while (s[cpy_in])
 	{
 		if (s[cpy_in] == '$' || s[cpy_in] == ' ')
-		{
-			cpy_in++;
 			break ;
-		}
 		cpy_in++;
 	}
-		
+	if (s[cpy_in] == ' ')
+		cpy_in++;
 	new = ft_substr(s, *in, cpy_in - *in);
 	*in = cpy_in;
 	return (new);

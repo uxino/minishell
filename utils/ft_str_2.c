@@ -7,7 +7,6 @@ char	*ft_strdup(const char *s)
 	int		len;
 
 	len = ft_strlen(s);
-	// printf("len(%d)\n", len);
 	i = 0;
 	p = (char *)malloc(sizeof(char) * (len + 1));
 	if (!p)
@@ -17,7 +16,6 @@ char	*ft_strdup(const char *s)
 		p[i] = s[i];
 		i++;
 	}
-		// printf("strdup: %d\n", i);
 	p[i] = '\0';
 	return (p);
 }

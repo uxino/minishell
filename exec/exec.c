@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/04 21:43:23 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/09 18:15:00 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void exec(t_data *info)
 {
 	int	i;
 	int	count;
-	int  status = 0;
-	int wpid;
 
 	info->pipe_count = find_pipe_count(info);
 	info->process = malloc(sizeof(t_process) * (info->pipe_count + 1));
@@ -27,7 +25,7 @@ void exec(t_data *info)
 	i = -1;
 	count = 0;
 	while (++i < info->pipe_count + 1)
-	{	
+	{
 		exec_command(info, info->cmd->commands + count, count, i);
 		pipe_finder(info, &count);
 	}
@@ -54,15 +52,16 @@ void	create_fork(t_data *info, char **read_line, int count, int i)
 		exit(42);
 	if (fork_id == 0)
 	{
-		new_exec = read_line_edit(info, count);
+		new_exec = redirect(info, count);
 		ft_process_merge(info, i);
+		child_builtin(info, new_exec, count);
 		find_path_and_exec(info, new_exec);
-		printf("minishell: %s: command not found\n", read_line[0]);
-		exit(42);
+		printf("minishell: %s: command not found\n", new_exec[0]);
+		exit(127);
 	}
 }
 
-void	find_path_and_exec(t_data *info, char **read_line)
+void	find_path_and_exec(t_data *info, char **rl)
 {
 	int		i;
 	char	*tmp;
@@ -73,46 +72,19 @@ void	find_path_and_exec(t_data *info, char **read_line)
 	while (info->paths[++i])
 	{
 		tmp2 = ft_strjoin(info->paths[i], "/");
-		tmp = ft_strjoin(tmp2, read_line[0]);
-		tmp3 = ft_strtrim(tmp, " ");
+		tmp = ft_strjoin(tmp2, rl[0]);
 		free(tmp2);
-		if (access(tmp3, F_OK) != -1)
+		if (access(tmp, F_OK) != -1)
 		{
-			execve(tmp3, read_line, info->env_p);
+			execve(tmp, rl, info->env_p);
 			free(tmp);
 			exit(42);
 		}
 		free(tmp);
 	}
-}
-
-char	**read_line_edit(t_data *info, int index)
-{
-	int		i;
-	int		temp;
-	char	**s;
-	char	*tmp;
-
-	temp = index;
-	while (info->cmd->commands[++index])
-		if (ft_strchr(info->cmd->commands[index], '|')
-			&& info->cmd->flags[index] == Q0)
-			break ;
-	s = (char **)malloc(sizeof(char *) * (index - temp + 1));
-	i = 0;
-	while (info->cmd->commands[temp] && temp < index)
+	if (access(rl[0], F_OK) != -1)
 	{
-		if (info->cmd->flags[temp] == Q0)
-		{
-			tmp = info->cmd->commands[temp++];
-			if (tmp[0])
-				s[i++] = ft_strtrim(tmp, " ");
-			else
-				s[i++] = tmp;
-		}
-		else
-			s[i++] = info->cmd->commands[temp++];
+		execve(rl[0], rl, info->env_p);
+		exit(42);
 	}
-	s[i] = NULL;
-	return (s);
 }

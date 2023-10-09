@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 21:04:17 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/04 22:31:14 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:39:15 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_char_count(char *read_line, int c)
 	return (count);
 }
 
-char	**pipe_split(char	*s, char c, int p)
+char	**pipe_split(char	*s, char *str_c, char c, int p)
 {
 	int		i;
 	int		j;
@@ -84,7 +84,7 @@ char	**pipe_split(char	*s, char c, int p)
 	while (s[i])
 	{
 		if (s[i] && s[i] == c && ++i)
-			str_split[j++] = ft_strdup("|");
+			str_split[j++] = ft_strdup(str_c);
 		temp = i;
 		while (s[i] && s[i] != c)
 			i++;
@@ -94,7 +94,7 @@ char	**pipe_split(char	*s, char c, int p)
 		if (s[i])
 			i++;
 		if (count_word(s, c) + p != j)
-			str_split[j++] = ft_strdup("|");
+			str_split[j++] = ft_strdup(str_c);
 	}
 	str_split[j] = 0;
 	return (str_split);
@@ -106,7 +106,7 @@ void	pipe_adder(t_data *info, char *str, int *k)
 	char	**split;
 
 	i = -1;
-	split = pipe_split(str, '|', ft_char_count(str, '|'));
+	split = pipe_split(str, "|", '|',ft_char_count(str, '|'));
 	while (split[++i])
 	{
 		info->cmd->commands[++(*k)] = split[i];
@@ -115,24 +115,39 @@ void	pipe_adder(t_data *info, char *str, int *k)
 	free(split);
 }
 
-void	lst_combining(t_data *info)
+int	char_count_lst(t_list *lst, char c)
 {
+	int	count;
+
+	count = 0;
+	while (lst)
+	{
+		count += ft_char_count(lst->value, c);
+		lst = lst->next;
+	}
+	return (count);
+}
+
+void	lst_info_combining(t_data *info)
+{
+	int		size;
 	int		k;
 	t_list	*iter;
 
 	k = -1;
 	iter = NULL;
 	iter = info->arg;
-	info->cmd->commands = malloc(10000);
-	info->cmd->flags = malloc(sizeof(int) * 10000);
+	size = ft_lstsize(iter) + char_count_lst(info->arg, ' ') + 1;
+	info->cmd->commands = malloc(sizeof(char *) * size);
+	info->cmd->flags = malloc(sizeof(int) * size);
 	while (iter)
 	{
-		if (ft_char_count(iter->value, '|') && (int)(iter->key) == Q0)
+		if (ft_char_count(iter->value, '|') && (long)(iter->key) == Q0)
 			pipe_adder(info, iter->value, &k);
 		else
 		{
 			info->cmd->commands[++k] = iter->value;
-			info->cmd->flags[k] = (int)iter->key;
+			info->cmd->flags[k] = (long)iter->key;
 		}
 		iter = iter->next;
 	}

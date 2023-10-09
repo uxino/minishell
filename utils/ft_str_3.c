@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 19:12:55 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/04 18:23:25 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/06 19:10:07 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,11 @@ char	*ft_strtrim(char const *s1, char const *set)
 		last_index--;
 	p = ft_substr(s1, i, last_index - i + 1);
 	return (p);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
 }
