@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 19:12:55 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/06 19:10:07 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/11 19:40:46 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (NULL);
 	while (s1[i] && ft_strchr(set, s1[i]))
 		i++;
-	last_index = ft_strlen(s1) -1;
+	last_index = ft_strlen(s1) - 1;
 	while (ft_strchr(set, s1[last_index]) && last_index)
 		last_index--;
 	p = ft_substr(s1, i, last_index - i + 1);

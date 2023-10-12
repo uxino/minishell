@@ -3,28 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:46 by museker           #+#    #+#             */
-/*   Updated: 2023/10/08 16:16:07 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/12 02:02:33 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
 int	lexer(t_data *info, char *read_line)
 {
-	if (check_read_line(read_line))
+	if (check_read_line(info, read_line))
 		return (1);
 	quote(info, read_line);
 	lst_info_combining(info);
 	return (0);
 }
 
-int	check_read_line(char *rl)
+int	check_read_line(t_data *info, char *rl)
 {
-	if (!*rl || check_syntax(rl) == 1)
+	if (!*rl || check_syntax(info, rl) == 1)
 	{
 		free(rl);
 		return (1);
@@ -34,16 +33,16 @@ int	check_read_line(char *rl)
 
 void	quote(t_data *info, char *read_line)
 {
-    int	i;
+	int	i;
 
-    i = 0;
-    while (read_line[i])
+	i = 0;
+	while (read_line[i])
 	{
 		if (read_line[i] == 39)
 			quotes(info, read_line, &i, 39);
-		else if (read_line[i] == 34)
-			quotes(info, read_line, &i, 34);
-		else if (read_line[i] != 34 || read_line[i] != 39)
+		else if (read_line[i] == '"')
+			quotes(info, read_line, &i, '"');
+		else if ((read_line[i] != '"') || (read_line[i] != '\''))
 			no_quote(info, read_line, &i);
 	}
 }
@@ -54,27 +53,29 @@ void	quotes(t_data *info, char *rl, int *index, int c1)
 	char	*nl;
 	int		end;
 
+	end = 0;
 	start = ++(*index);
 	while (rl[*index])
 	{
 		if (rl[*index] == c1)
 		{
 			end = (*index)++;
-			break;
+			break ;
 		}
 		(*index)++;
 	}
 	nl = ft_substr(rl, start, end - start);
 	if (c1 == '"' && ft_char_count(rl, '$'))
-		ft_lstadd_back(&info->arg, ft_lstnew((void *)Q1, check_dollar(info, nl)));
+		ft_lstadd_back(&info->arg, ft_lstnew((void *)Q1, check_dollar(info,
+					nl)));
 	else
 		ft_lstadd_back(&info->arg, ft_lstnew((void *)Q1, nl));
 }
 
 void	no_quote(t_data *info, char *rl, int *index)
 {
-	int		start;
-	int		end;
+	int	start;
+	int	end;
 
 	start = *index;
 	while (rl[*index])
@@ -91,33 +92,9 @@ void	no_quote(t_data *info, char *rl, int *index)
 		(*index)++;
 	}
 	if (rl[*index - 1] != ' ' && (rl[*index] == '\0'
-			&& !(rl[*index - 1] == '\'' || rl[*index - 1] == '"')))
+			&& !(rl[*index - 1] == '\''
+				|| rl[*index - 1] == '"')))
 		end = *index;
-	ft_lstadd_back(&info->arg, ft_lstnew((void *)Q0, check_dollar(info, ft_substr(rl, start, end - start))));
-}
-
-char	*char_combining(char **s)
-{
-	int		i;
-	char	*p;
-	int		count;
-	int		j;
-	int		k;
-
-	i = -1;
-	k = -1;
-	count = 0;
-	while (s[++i])
-		count += ft_strlen(s[i]);
-	i = -1;
-	p = malloc(count + 1);
-	while (s[++i])
-	{
-		j = -1;
-		while (s[i][++j])
-			p[++k] = s[i][j];
-	}
-	p[++k] = 0;
-
-	return (p);
+	ft_lstadd_back(&info->arg, ft_lstnew((void *)Q0, check_dollar(info,
+				ft_substr(rl, start, end - start))));
 }

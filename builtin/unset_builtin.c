@@ -1,40 +1,64 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_builtin.c                                   :+:      :+:    :+:   */
+/*   unset_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 00:38:41 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/12 01:20:52 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	export_builtin(t_data *info)
+void	unset_is_path(t_data *info, t_list *path_lst)
 {
-	t_list	*exlst;
-
-	exlst = info->export_lst;
-	while (exlst)
+	if (!ft_strcmp(path_lst->key, "PATH"))
 	{
-		printf("declare -x ");
-		printf("%s=\"%s\"\n", exlst->key, exlst->value);
-		exlst = exlst->next;
+		two_pointer_free(info->paths);
+		info->paths = ft_split(" ", ' ');
 	}
-	exit(0);
 }
 
-int	err_export(t_data *info, char **s, t_list *tlst)
+void	unset_clear(t_data *info, t_list **lst, char *s)
 {
-	two_pointer_free(s);
-	ft_lstclear(&tlst);
-	err_message(info, "Syntax Error");
-	return (1);
+	t_list	*tmp;
+	t_list	*tmp4;
+
+	tmp = (*lst);
+	while ((*lst)->next)
+	{
+		if (!ft_strcmp(tmp->key, s))
+		{
+			tmp = tmp->next;
+			break ;
+		}
+		else if (!ft_strcmp((*lst)->next->key, s))
+		{
+			tmp4 = (*lst)->next;
+			(*lst)->next = (*lst)->next->next;
+			unset_is_path(info, tmp4);
+			free(tmp4->key);
+			free(tmp4->value);
+			free(tmp4);
+			break ;
+		}
+		(*lst) = (*lst)->next;
+	}
+	(*lst) = tmp;
 }
 
-int	export_syntax(t_data *info)
+void	unset_run(t_data *info, char *s)
+{
+	t_data	*tmp;
+
+	tmp = info;
+	unset_clear(info, &info->env_lst, s);
+	unset_clear(info, &info->export_lst, s);
+}
+
+int	unset_syntax(t_data *info)
 {
 	int		i;
 	t_list	*tlst;
@@ -48,42 +72,22 @@ int	export_syntax(t_data *info)
 	s = lst_redirect_combining(tlst);
 	i = -1;
 	while (s[++i])
-		if (ft_char_count(s[i], '='))
-			if (find_i(s[i], '=') == 0)
-				return (err_export(info, s, tlst));
-	i = -1;
-	while (s[++i])
-		change_export(info, s[i]);
+		unset_run(info, s[i]);
 	two_pointer_free(s);
 	ft_lstclear(&tlst);
 	return (0);
 }
 
-void	env_builtin(t_data *info)
+int	unset_builtin(t_data *info, char *rl)
 {
-	t_list	*envlst;
+	t_data	*tmp;
 
-	envlst = info->env_lst;
-	while (envlst)
+	tmp = info;
+	if (!check_builtin_str(info, "unset"))
 	{
-		printf("%s=%s\n", envlst->key, envlst->value);
-		envlst = envlst->next;
-	}
-	exit(0);
-}
-
-int	add_export(t_data *info, char *rl)
-{
-	t_list	*tmp;
-
-	tmp = info->env_lst;
-	if (!check_builtin_str(info, "export") && info->cmd->commands[1])
-	{
-		if (export_syntax(info))
-			g_data->exit_code = 1;
-		else
-			g_data->exit_code = 0;
+		unset_syntax(info);
 		free_info_and_rl(info, rl);
+		g_data->exit_code = 0;
 		return (1);
 	}
 	return (0);

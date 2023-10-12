@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:40 by museker           #+#    #+#             */
-/*   Updated: 2023/10/10 00:56:31 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/12 00:05:07 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	*ft_before_c(char *s, char c)
 	char	*result;
 
 	i = -1;
+	index = 0;
 	if (!s[0])
 		return (NULL);
 	while (s[++i])
@@ -75,8 +76,6 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	size_t	p;
 
 	i = 0;
-	if (!(*needle))
-		return (NULL);
 	while (haystack[i] && i < len)
 	{
 		j = 0;

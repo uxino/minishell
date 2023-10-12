@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_str_2.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/11 18:38:00 by museker           #+#    #+#             */
+/*   Updated: 2023/10/12 02:29:33 by mucakmak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 char	*ft_strdup(const char *s)
@@ -79,10 +91,11 @@ int	find_key(t_data *info, char *s)
 	temp = info->env_lst;
 	while (temp)
 	{
-		if (ft_strnstr(temp->key, s,
-			ft_strlen(s)))
+		if (ft_strnstr(temp->key, s, ft_strlen(s)))
 			return (1);
 		temp = temp->next;
 	}
+	if (s[0] == '?')
+		return (1);
 	return (0);
 }

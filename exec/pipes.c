@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/05 03:43:41 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/11 19:40:37 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	ft_process_merge(t_data *info, int i)
 {
-	if (i == 0)
+	if (info->hd->flag)
+		dup2(info->hd->fd[1], 1);
+	else if (i == 0)
 		dup2(info->process[0].fd[1], 1);
 	else if (i == info->pipe_count)
 		dup2(info->process[i - 1].fd[0], 0);
@@ -45,8 +47,7 @@ void	pipe_finder(t_data *info, int *count)
 		if (ft_strchr(info->cmd->commands[*count], '|')
 			&& info->cmd->flags[*count] == Q0 && ++(*count))
 			break ;
-	if (info->cmd->commands[*count]
-		&& info->cmd->commands[*count][0] == ' '
+	if (info->cmd->commands[*count] && info->cmd->commands[*count][0] == ' '
 		&& info->cmd->flags[*count] == Q0)
 		++(*count);
 }
@@ -54,7 +55,7 @@ void	pipe_finder(t_data *info, int *count)
 void	pipe_close(t_data *info)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < info->pipe_count)
 	{
