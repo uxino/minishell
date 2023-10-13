@@ -6,7 +6,7 @@
 /*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/11 19:40:37 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/13 17:59:41 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,18 @@
 
 void	ft_process_merge(t_data *info, int i)
 {
-	if (info->hd->flag)
-		dup2(info->hd->fd[1], 1);
-	else if (i == 0)
+	if (info->hd[i].flag)
+		dup2(info->hd[i].fd[1], 1);
+	if (info->pipe_count == 0)
+		return ;
+	if (i == 0)
 		dup2(info->process[0].fd[1], 1);
-	else if (i == info->pipe_count)
+	else if (i == info->pipe_count && !info->hd[i].flag)
 		dup2(info->process[i - 1].fd[0], 0);
 	else
 	{
-		dup2(info->process[i - 1].fd[0], 0);
+		if (!info->hd[i].flag)
+			dup2(info->process[i - 1].fd[0], 0);
 		dup2(info->process[i].fd[1], 1);
 	}
 	pipe_close(info);
@@ -61,6 +64,13 @@ void	pipe_close(t_data *info)
 	{
 		close(info->process[i].fd[0]);
 		close(info->process[i].fd[1]);
+		i++;
+	}
+	i = 0;
+	while (i < info->pipe_count + 1)
+	{
+		close(info->hd[i].fd[0]);
+		close(info->hd[i].fd[1]);
 		i++;
 	}
 }

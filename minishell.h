@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 16:43:11 by museker           #+#    #+#             */
-/*   Updated: 2023/10/12 13:31:06 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/13 17:03:04 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,15 +150,15 @@ void		pipe_close(t_data *info);
 void		overwrite_output(t_data *info, t_list *lst);
 void		append_output(t_data *info, t_list *lst);
 void		overwrite_input(t_data *info, t_list *lst);
-void		append_input(t_data *info, t_list *lst);
-void		lst_run_redirect(t_data *info, t_list **lst);
+void		append_input(t_data *info, t_list *lst, int i);
+void		lst_run_redirect(t_data *info, t_list **lst, int i);
 
 // redirect.c
 void		redirect_split(t_data *info, t_list **lst, char *s, int in);
 void		lst_add_redirect(t_data *info, t_list **lst, int i);
 t_list		*go_redirect(t_list *lst);
 char		*rd_last_str(t_list *lst);
-char		**redirect(t_data *info, int count);
+char		**redirect(t_data *info, int count, int i);
 
 // utils.c
 int			get_index(char *s, int c, int q);

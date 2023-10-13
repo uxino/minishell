@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 02:45:57 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/13 18:07:58 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,13 @@ void	exec(t_data *info, char *rl)
 
 	info->pipe_count = find_pipe_count(info);
 	info->process = malloc(sizeof(t_process) * (info->pipe_count + 1));
+	info->hd = malloc(sizeof(t_heredoc) * (info->pipe_count + 1));
 	i = -1;
 	while (++i < info->pipe_count)
 		pipe(info->process[i].fd);
+	i = -1;
+	while (++i < info->pipe_count + 1)
+		pipe(info->hd[i].fd);
 	i = -1;
 	count = 0;
 	while (++i < info->pipe_count + 1)
@@ -34,6 +38,7 @@ void	exec(t_data *info, char *rl)
 		;
 	free_info_and_rl(info, rl);
 	free(info->process);
+	free(info->hd);
 }
 
 int	exec_command(t_data *info, char **read_line, int count, int i)
@@ -48,7 +53,9 @@ int	heredoc_check(t_data *info, int i)
 {
 	int		j;
 	char	**s;
+	int		count;
 
+	count = 0;
 	s = info->cmd->commands;
 	while (s[i])
 	{
@@ -59,11 +66,11 @@ int	heredoc_check(t_data *info, int i)
 				break ;
 			while (s[i][++j])
 				if (s[i][j] == '<' && s[i][j + 1] == '<')
-					return (1);
+					count++;
 		}
 		i++;
 	}
-	return (0);
+	return (count);
 }
 
 void	create_fork(t_data *info, char **read_line, int count, int i)
@@ -77,9 +84,9 @@ void	create_fork(t_data *info, char **read_line, int count, int i)
 		exit(42);
 	if (fork_id == 0)
 	{
-		info->hd->flag = heredoc_check(info, count);
+		info->hd[i].flag = heredoc_check(info, count);
+		new_exec = redirect(info, count, i);
 		ft_process_merge(info, i);
-		new_exec = redirect(info, count);
 		child_builtin(info, new_exec, count);
 		find_path_and_exec(info, new_exec);
 		printf("minishell: %s: command not found\n", new_exec[0]);

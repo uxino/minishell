@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:23 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 15:28:14 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/13 17:01:35 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ t_data	*ft_initializer(void)
 	signal(SIGINT, ft_sig_handler);
 	info = malloc(sizeof(t_data));
 	info->cmd = malloc(sizeof(t_commands));
-	info->hd = malloc(sizeof(t_heredoc));
 	info->arg = NULL;
 	info->env_lst = NULL;
 	info->export_lst = NULL;

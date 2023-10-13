@@ -6,7 +6,7 @@
 /*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 23:06:32 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 00:10:14 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/13 18:14:36 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,12 @@ void	overwrite_input(t_data *info, t_list *lst)
 	return ;
 }
 
-void	append_input(t_data *info, t_list *lst)
+void	append_input(t_data *info, t_list *lst, int i)
 {
 	char		*s;
 	char		*rd;
-	static int	counter;
+	static int	counter = 0;
 
-	counter = 0;
-	pipe(info->hd->fd);
 	counter++;
 	s = rd_last_str(lst);
 	signal(SIGINT, hg_signal);
@@ -69,16 +67,21 @@ void	append_input(t_data *info, t_list *lst)
 		rd = readline("> ");
 		if (!ft_strcmp(rd, s))
 			break ;
-		ft_putstr_fd(rd, info->hd->fd[1]);
-		ft_putchar_fd('\n', info->hd->fd[1]);
+		if (counter == info->hd[i].flag)
+		{
+			ft_putstr_fd(rd, info->hd[i].fd[1]);
+			ft_putchar_fd('\n', info->hd[i].fd[1]);
+		}
 	}
-	close(info->hd->fd[1]);
-	dup2(info->hd->fd[0], 0);
+	printf("counter: %d, i: %d\n", counter, i);
+	printf("counter2: %d\n", info->hd->flag);
+	if (counter == info->hd->flag)
+		dup2(info->hd[i].fd[0], 0);
 	pipe_close(info);
 	return ;
 }
 
-void	lst_run_redirect(t_data *info, t_list **lst)
+void	lst_run_redirect(t_data *info, t_list **lst, int i)
 {
 	t_list	*tmp;
 
@@ -93,7 +96,7 @@ void	lst_run_redirect(t_data *info, t_list **lst)
 		else if (tmp && tmp->next && ft_char_count(tmp->value, '<') == 1)
 			overwrite_input(info, tmp);
 		else if (tmp && tmp->next && ft_char_count(tmp->value, '<') == 2)
-			append_input(info, tmp);
+			append_input(info, tmp, i);
 		if (tmp)
 			tmp = tmp->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/11 23:57:51 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/13 17:15:20 by museker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,14 @@ char	*rd_last_str(t_list *lst)
 	return (s);
 }
 
-char	**redirect(t_data *info, int count)
+char	**redirect(t_data *info, int count, int i)
 {
 	t_list	*lst;
 	char	**str;
 
 	lst = NULL;
 	lst_add_redirect(info, &lst, count);
-	lst_run_redirect(info, &lst);
+	lst_run_redirect(info, &lst, i);
 	str = lst_redirect_combining(lst);
 	return (str);
 }
