@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:43 by museker           #+#    #+#             */
-/*   Updated: 2023/10/12 13:14:16 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/16 19:53:52 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,12 @@ void	*dollar_split(t_data *info, char *s, int *in)
 	char	*char1;
 
 	(*in)++;
-	if (s[*in] == '$' || s[*in] == ' ' || s[*in] == '.' || !s[*in])
+	if (s[*in] == '$' || s[*in] == ' ' || s[*in] == '.'
+		|| s[*in] == '\'' || !s[*in])
 		return (ft_strdup("$"));
 	tmp = *in;
-	while (s[*in] && s[*in] != '$' && s[*in] != ' ' && s[*in] != '.')
+	while (s[*in] && s[*in] != '$' && s[*in] != ' '
+		&& s[*in] != '\'' && s[*in] != '.')
 		(*in)++;
 	tmp2 = *in;
 	char_tmp = ft_substr(s, tmp, tmp2 - tmp);

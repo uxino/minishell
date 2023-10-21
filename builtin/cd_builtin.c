@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 09:55:14 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 01:13:51 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/16 19:53:52 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,21 @@ t_list	*and_get_lst(t_list *lst, char *s)
 int	set_home(t_data *info)
 {
 	char	*temp;
+	int		flag;
 
 	if (!info->cmd->commands[1])
 	{
 		temp = find_key_and_get_char(info->env_lst, "HOME");
-		if (temp && !chdir(temp))
+		if (temp)
+			flag = chdir(temp);
+		if (temp && !flag)
 		{
 			old_pwd_and_pwd_changer(info->env_lst);
 			old_pwd_and_pwd_changer(info->export_lst);
 			return (1);
 		}
+		else if (flag == -1)
+			printf("minishell: %s: No such file or directiory\n", temp);
 		else
 			printf("HOME not set\n");
 		return (1);

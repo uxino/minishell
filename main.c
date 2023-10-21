@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 15:17:23 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/13 17:01:35 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/16 19:53:51 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ int	main(int argc, char *argv[], char **env_p)
 		if (lexer(info, read_line) || main_builtin(info, read_line))
 			continue ;
 		exec(info, read_line);
+		free_info_and_rl(info, read_line);
+		free(info->process);
+		free(info->hd);
 	}
 	return (0);
 }
@@ -37,6 +40,7 @@ t_data	*ft_initializer(void)
 {
 	t_data	*info;
 
+	suppress_output();
 	signal(SIGINT, ft_sig_handler);
 	info = malloc(sizeof(t_data));
 	info->cmd = malloc(sizeof(t_commands));
@@ -45,7 +49,7 @@ t_data	*ft_initializer(void)
 	info->export_lst = NULL;
 	g_data = malloc(sizeof(t_data));
 	g_data->hd = malloc(sizeof(sizeof(t_heredoc)));
-	g_data->hd->flag = 0;
+	g_data->check_fork = 0;
 	return (info);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 21:04:17 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 01:51:50 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/16 19:53:52 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	check_redirect(char *rl)
 			i++;
 		while (rl[i] && rl[i] == ' ')
 			i++;
-		if (rl[i] && (rl[i] == '>' || rl[i] == '<'))
+		if (rl[i] && (rl[i] == '>' || rl[i] == '<' || rl[i] == '|'))
 			return (1);
 		while (rl[i])
 		{
@@ -117,12 +117,15 @@ int	check_syntax(t_data *info, char *rl)
 	if (s[l] == '|' || s[l] == '>' || s[l] == '<' || s[0] == '|')
 	{
 		free(s);
-		return (err_message(info, "Syntax Error"));
+		return (err_message(info,
+				"minishell: syntax error near unexpected token"));
 	}
 	free(s);
 	if (check_pipe(rl))
-		return (err_message(info, "Syntax Error"));
+		return (err_message(info,
+				"minishell: syntax error near unexpected token"));
 	if (check_redirect(rl))
-		return (err_message(info, "Syntax Error"));
+		return (err_message(info,
+				"minishell: syntax error near unexpected token"));
 	return (0);
 }

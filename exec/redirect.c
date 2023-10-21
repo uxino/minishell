@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/13 17:15:20 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/16 15:05:39 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void	lst_add_redirect(t_data *info, t_list **lst, int i)
 	str = info->cmd->commands;
 	while (str[i])
 	{
-		if (ft_char_count(str[i], '|') > 0
+		if (char_c(str[i], '|') > 0
 			&& (void *)(long)info->cmd->flags[i] == Q0)
 			break ;
-		if ((void *)(long)info->cmd->flags[i] == Q0 && (ft_char_count(str[i],
-					'>') || ft_char_count(str[i], '<')))
+		if ((void *)(long)info->cmd->flags[i] == Q0 && (char_c(str[i],
+					'>') || char_c(str[i], '<')))
 			redirect_split(info, lst, str[i], i);
 		else
 			ft_lstadd_back(lst, ft_lstnew((void *)(long)info->cmd->flags[i],
@@ -57,8 +57,8 @@ t_list	*go_redirect(t_list *lst)
 {
 	while (lst)
 	{
-		if (lst->key == Q0 && (ft_char_count(lst->value, '>')
-				|| ft_char_count(lst->value, '<')))
+		if (lst->key == Q0 && (char_c(lst->value, '>')
+				|| char_c(lst->value, '<')))
 			return (lst);
 		lst = lst->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 00:38:41 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/16 15:05:39 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	err_export(t_data *info, char **s, t_list *tlst)
 {
 	two_pointer_free(s);
 	ft_lstclear(&tlst);
-	err_message(info, "Syntax Error");
+	err_message(info, "minishell: export: ` ': not a valid identifier");
 	return (1);
 }
 
@@ -48,7 +48,7 @@ int	export_syntax(t_data *info)
 	s = lst_redirect_combining(tlst);
 	i = -1;
 	while (s[++i])
-		if (ft_char_count(s[i], '='))
+		if (char_c(s[i], '='))
 			if (find_i(s[i], '=') == 0)
 				return (err_export(info, s, tlst));
 	i = -1;

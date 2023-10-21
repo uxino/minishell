@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 01:42:18 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:06:20 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_builtin_str(t_data *info, char *str)
 
 	i = -1;
 	while (info->cmd->commands[++i])
-		if (ft_char_count(info->cmd->commands[i], '|'))
+		if (char_c(info->cmd->commands[i], '|'))
 			return (1);
 	if (info->cmd->flags[0] == Q0)
 	{

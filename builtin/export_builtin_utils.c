@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 23:09:37 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 13:24:07 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/16 19:53:52 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,20 @@ void	export_is_path(t_data *info, char *s, char *p)
 	}
 }
 
-int	check_valid(char *s, int i)
+int	check_valid(char *s1, char *s2, int i)
 {
-	if (ft_char_count(s, ' '))
+	if (char_c(s2, ' ') || char_c(s2, '?') || char_c(s2, '-')
+		|| char_c(s2, '/') || char_c(s2, '@') || char_c(s2, '#')
+		|| char_c(s2, ':') || char_c(s2, '%') || char_c(s2, '.')
+		|| char_c(s2, ',') || char_c(s2, '$') || char_c(s2, '+')
+		|| char_c(s2, '0') || char_c(s2, '1') || char_c(s2, '2')
+		|| char_c(s2, '3') || char_c(s2, '4') || char_c(s2, '5')
+		|| char_c(s2, '6') || char_c(s2, '7') || char_c(s2, '8')
+		|| char_c(s2, '9'))
 	{
-		printf("minishell: ' ' is not a valid identifier\n");
+		printf("minishell: export: `%s': not a valid identifier\n", s1);
 		if (i)
-			free(s);
-		return (1);
-	}
-	if (ft_char_count(s, '?'))
-	{
-		printf("minishell: '?' is not a valid identifier\n");
-		if (i)
-			free(s);
+			free(s2);
 		return (1);
 	}
 	return (0);
@@ -45,10 +45,10 @@ void	change_export(t_data *info, char *s)
 	char	*tmp;
 	char	*tmp2;
 
-	if (ft_char_count(s, '='))
+	if (char_c(s, '='))
 	{
 		tmp = ft_substr(s, 0, find_i(s, '='));
-		if (check_valid(tmp, 1))
+		if (check_valid(s, tmp, 1))
 			return ;
 		tmp2 = ft_substr(s, find_i(s, '=') + 1, ft_strlen(s)
 				- find_i(s, '=') + 1);
@@ -61,7 +61,7 @@ void	change_export(t_data *info, char *s)
 	}
 	else
 	{
-		if (check_valid(s, 0))
+		if (check_valid(s, s, 0))
 			return ;
 		if (!find_key_and_get_char(info->export_lst, s))
 			export_control_and_change(info->export_lst,

@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 21:04:17 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 02:07:12 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:05:39 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	pipe_ct(char *read_line)
 	return (count * 2);
 }
 
-int	ft_char_count(char *read_line, int c)
+int	char_c(char *read_line, int c)
 {
 	int	i;
 	int	count;
@@ -76,7 +76,7 @@ void	pipe_adder(t_data *info, char *str, int *k)
 	char	**split;
 
 	i = -1;
-	split = pipe_split(str, "|", '|', ft_char_count(str, '|'));
+	split = pipe_split(str, "|", '|', char_c(str, '|'));
 	while (split[++i])
 	{
 		info->cmd->commands[++(*k)] = split[i];

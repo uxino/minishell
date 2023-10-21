@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:15:11 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/13 17:59:41 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/13 19:24:11 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_process_merge(t_data *info, int i)
 {
 	if (info->hd[i].flag)
-		dup2(info->hd[i].fd[1], 1);
+		dup2(info->hd[i].fd[0], 0);
 	if (info->pipe_count == 0)
 		return ;
 	if (i == 0)

@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: museker <museker@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 16:43:11 by museker           #+#    #+#             */
-/*   Updated: 2023/10/13 17:03:04 by museker          ###   ########.fr       */
+/*   Updated: 2023/10/16 15:05:39 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -24,6 +22,10 @@
 # include <dirent.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
+# include <termios.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define Q0 0
 # define Q1 1
@@ -66,6 +68,7 @@ typedef struct s_data
 	t_list			*arg;
 	t_process		*process;
 	t_heredoc		*hd;
+	int				check_fork;
 }	t_data;
 
 t_data	*g_data;
@@ -107,7 +110,7 @@ int			exit_builtin(t_data *info, char *rl);
 
 // export_builtin_utils.c
 void		export_is_path(t_data *info, char *s, char *p);
-int			check_valid(char *s, int i);
+int			check_valid(char *s1, char *s2, int i);
 void		change_export(t_data *info, char *s);
 int			export_control_and_change(t_list *info, char *s, char *p, int i);
 
@@ -119,10 +122,10 @@ int			add_export(t_data *info, char *rl);
 int			err_export(t_data *info, char **s, t_list *tlst);
 
 // signals.c
+void		suppress_output(void);
 void		ft_sig_handler(int sig);
 void		check_sigint(t_data *info, char *rl);
 int			err_message(t_data *info, char *msg);
-void		hg_signal(int sig);
 
 // unset_builtin.c
 void		unset_is_path(t_data *info, t_list *path_lst);
@@ -139,6 +142,10 @@ int			exec_command(t_data *info, char **read_line, int count, int i);
 int			heredoc_check(t_data *info, int i);
 void		create_fork(t_data *info, char **read_line, int count, int i);
 void		find_path_and_exec(t_data *info, char **rl);
+
+// exec_utils.c
+void		is_directory_exit(char *s, char *rl, int a);
+void		is_directory(t_data *info, char **rl);
 
 // pipes.c
 void		ft_process_merge(t_data *info, int i);
@@ -190,7 +197,7 @@ int			char_count_lst(t_list *lst, char c);
 
 // lexer_utils.c
 int			pipe_ct(char *read_line);
-int			ft_char_count(char *read_line, int c);
+int			char_c(char *read_line, int c);
 char		**pipe_split(char *s, char *str_c, char c, int p);
 void		pipe_adder(t_data *info, char *str, int *k);
 

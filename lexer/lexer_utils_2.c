@@ -6,7 +6,7 @@
 /*   By: mucakmak <mucakmak@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 22:59:43 by mucakmak          #+#    #+#             */
-/*   Updated: 2023/10/12 13:17:42 by mucakmak         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:05:39 by mucakmak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void	lst_info_combining(t_data *info)
 
 	k = -1;
 	iter = info->arg;
-	size = ft_lstsize(iter) + char_count_lst(info->arg, ' ') + 1;
+	size = ft_lstsize(iter) + char_count_lst(info->arg, ' ') + 2;
 	info->cmd->commands = malloc(sizeof(char *) * size);
 	info->cmd->flags = malloc(sizeof(int) * size);
 	while (iter)
 	{
-		if (ft_char_count(iter->value, '|') && (long)(iter->key) == Q0)
+		if (char_c(iter->value, '|') && (long)(iter->key) == Q0)
 		{
 			pipe_adder(info, iter->value, &k);
 			free(iter->value);
@@ -83,8 +83,8 @@ int	char_count_lst(t_list *lst, char c)
 	count = 0;
 	while (lst)
 	{
-		count += ft_char_count(lst->value, c);
+		count += char_c(lst->value, c);
 		lst = lst->next;
 	}
-	return (count);
+	return (count + 1);
 }
